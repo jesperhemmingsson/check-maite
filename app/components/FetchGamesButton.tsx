@@ -1,8 +1,8 @@
-import { useContext, useState } from "react";
-import { GameContext } from "../context/GameContext";
+import { useState } from "react";
+import { useGameContext } from "../context/GameContext";
 
 export default function FetchGamesButton() {
-  const { fetchGames } = useContext(GameContext);
+  const { fetchGames } = useGameContext();
   const [username, setUsername] = useState("");
   const [year, setYear] = useState("");
   const [month, setMonth] = useState("");
@@ -12,7 +12,7 @@ export default function FetchGamesButton() {
   };
 
   return (
-    <div>
+    <div className="container">
       <input
         type="text"
         placeholder="Username"
@@ -31,10 +31,7 @@ export default function FetchGamesButton() {
         value={month}
         onChange={(e) => setMonth(e.target.value)}
       />
-      <button
-        onClick={handleFetchGames}
-        className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-      >
+      <button onClick={handleFetchGames}>
         Fetch Data
       </button>
     </div>

@@ -1,8 +1,9 @@
-import { useContext, useState } from "react";
-import { GameContext } from "../context/GameContext";
+import { useContext, useState, useEffect } from "react";
+import { useGameContext, GameContext } from "../context/GameContext";
+import TimeControlCheckboxes from "./TimeControlCheckboxes";
 
 export default function VisualizeGames() {
-  const { games } = useContext(GameContext);
+  const { games, filteredGames, setFilteredGames } = useGameContext();
   const [selectedTypes, setSelectedTypes] = useState({
     bullet: true,
     blitz: true,
@@ -18,38 +19,22 @@ export default function VisualizeGames() {
     }));
   };
 
-  const filteredGames = games?.filter((game: { time_class: keyof typeof selectedTypes}) => selectedTypes[game.time_class]);
+  useEffect(() => {
+    const filteredGames = games?.filter(
+      (game: { time_class: keyof typeof selectedTypes }) =>
+        selectedTypes[game.time_class]
+    );
+    setFilteredGames(filteredGames);
+  }, [games, selectedTypes, setFilteredGames]);
 
   return (
-    <div>
-      <div>
-        <label>
-          <input
-            type="checkbox"
-            checked={selectedTypes.bullet}
-            onChange={() => handleCheckboxChange("bullet")}
-          />
-          Bullet
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={selectedTypes.blitz}
-            onChange={() => handleCheckboxChange("blitz")}
-          />
-          Blitz
-        </label>
-        <label>
-          <input
-            type="checkbox"
-            checked={selectedTypes.rapid}
-            onChange={() => handleCheckboxChange("rapid")}
-          />
-          Rapid
-        </label>
-      </div>
+    <div className="container">
+      <TimeControlCheckboxes
+        selectedTypes={selectedTypes}
+        onCheckboxChange={handleCheckboxChange}
+      />
       {filteredGames && filteredGames.length > 0 ? (
-        <pre>{JSON.stringify(filteredGames, null, 2)}</pre>
+        <p>Found {filteredGames.length} games</p>
       ) : (
         <p>No games found</p>
       )}
