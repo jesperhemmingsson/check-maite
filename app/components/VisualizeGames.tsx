@@ -2,7 +2,12 @@ import { useContext, useState, useEffect } from "react";
 import { useGameContext, GameContext } from "../context/GameContext";
 import TimeControlCheckboxes from "./TimeControlCheckboxes";
 
-export default function VisualizeGames() {
+interface VisualizeGamesProps {
+  openAIKey: string;
+  setOpenAIKey: React.Dispatch<React.SetStateAction<string>>;
+}
+
+export default function VisualizeGames({ openAIKey, setOpenAIKey }: VisualizeGamesProps) {
   const { games, filteredGames, setFilteredGames } = useGameContext();
   const [selectedTypes, setSelectedTypes] = useState({
     bullet: true,
@@ -38,6 +43,12 @@ export default function VisualizeGames() {
       ) : (
         <p>No games found</p>
       )}
+      <input
+        type="password"
+        placeholder="Enter OpenAI Key"
+        value={openAIKey}
+        onChange={(e) => setOpenAIKey(e.target.value)}
+      />
     </div>
   );
 }

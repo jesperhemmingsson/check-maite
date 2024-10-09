@@ -1,21 +1,47 @@
 "use client";
 
+import { useState } from "react";
 import { GameProvider } from "./context/GameContext";
-import FetchGamesButton from "./components/FetchGamesButton";
+import FetchGames from "./components/FetchGames";
 import VisualizeGames from "./components/VisualizeGames";
 import ReviewComponent from "./components/ReviewComponent";
+import LoadingSpinner from "./components/LoadingSpinner";
 
 export default function Home() {
+  const [view, setView] = useState<"form" | "games" | "review" | "loading">("form");
+  const [review, setReview] = useState<string>("");
+  const [openAIKey, setOpenAIKey] = useState<string>(""); // State for OpenAI key
+
+  const handleFetchGames = () => {
+    setView("games");
+  };
+
+  const handleGenerateReview = async () => {
+    setView("review");
+  };
+
+  const handleBack = () => {
+    setView("form");
+  };
+
   return (
     <div className="home-container">
+      <h1>chess-maite</h1>
       <GameProvider>
-        <div className="sidebar">
-          <FetchGamesButton />
-        </div>
-        <div className="main-content">
-          <VisualizeGames />
-          <ReviewComponent />
-        </div>
+        {view === "form" && <FetchGames onFetchGames={handleFetchGames} />}
+        {view === "games" && (
+          <>
+            <VisualizeGames openAIKey={openAIKey} setOpenAIKey={setOpenAIKey} />
+            <button onClick={handleGenerateReview}>Generate Review</button>
+            {view === "loading" && <LoadingSpinner />} 
+          </>
+        )} 
+        {view === "loading" && <LoadingSpinner />}
+        {view === "review" && (
+          <>
+            <ReviewComponent review={review} openAIKey={openAIKey} />
+          </>
+        )}
       </GameProvider>
     </div>
   );

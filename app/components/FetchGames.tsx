@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useGameContext } from "../context/GameContext";
 
-export default function FetchGamesButton() {
+export default function FetchGames({ onFetchGames }: { onFetchGames: () => void }) {
   const { fetchGames } = useGameContext();
   const [username, setUsername] = useState("");
   const [year, setYear] = useState("");
@@ -9,6 +9,7 @@ export default function FetchGamesButton() {
 
   const handleFetchGames = () => {
     fetchGames(username, year, month);
+    onFetchGames();
   };
 
   return (

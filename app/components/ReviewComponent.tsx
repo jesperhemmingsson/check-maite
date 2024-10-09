@@ -1,14 +1,19 @@
 import { useGameContext } from "../context/GameContext";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 
-const getReview = async (prompt: string) => {
+interface ReviewComponentProps {
+  review: string;
+  openAIKey: string;
+}
+
+const getReview = async (prompt: string, openAIKey: string) => {
   const response = await fetch('/api/review', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ prompt }),
+    body: JSON.stringify({ prompt, openAIKey }), // Include the OpenAI key in the request body
   });
 
   if (!response.ok) {
@@ -63,7 +68,7 @@ const ReviewDisplay = ({ review }: { review: string }) => {
     <div>
       {Object.keys(reviewObject).map((key) => (
         <div key={key}>
-          <h2>{key.charAt(0).toUpperCase() + key.slice(1)}</h2>
+          <h2>{key.replace(/_/g, ' ').charAt(0).toUpperCase() + key.replace(/_/g, ' ').slice(1)}</h2>
           <ul>
             {reviewObject[key].map((item: string, index: number) => (
               <li key={index}>{item}</li>
@@ -75,31 +80,41 @@ const ReviewDisplay = ({ review }: { review: string }) => {
   );
 };
 
-export default function ReviewComponent() {
+export default function ReviewComponent({ review, openAIKey }: ReviewComponentProps) {
   const { filteredGames } = useGameContext();
-  const [review, setReview] = useState<string>("");
+  const [reviewState, setReviewState] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
+  const [error, setError] = useState<boolean>(false);
 
-  const handleGenerateReview = async () => {
-    setLoading(true);
-    const all_pgn = filteredGames?.map((game) => game.pgn);
-    const prompt = generatePrompt(all_pgn);
-    try {
-      const review = await getReview(prompt);
-      setReview(review);
-    } catch (error) {
-      console.error(error);
-    } finally {
-      setLoading(false);
+  useEffect(() => {
+    const handleGenerateReview = async () => {
+      setError(false);
+      setLoading(true);
+      const all_pgn = filteredGames?.map((game) => game.pgn);
+      const prompt = generatePrompt(all_pgn);
+      try {
+        const review = await getReview(prompt, openAIKey); // Pass the OpenAI key to the getReview function
+        setReviewState(review);
+      } catch (error) {
+        console.error(error);
+        setError(true);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (filteredGames && filteredGames.length > 0) {
+      handleGenerateReview();
     }
-  };
+  }, [filteredGames, openAIKey]);
 
   return (
     <div className="container">
-      <button onClick={handleGenerateReview} disabled={loading || !filteredGames || filteredGames.length === 0}>
-        Generate Review
-      </button>
-      {loading ? <LoadingSpinner /> : <ReviewDisplay review={review} />}
+      {loading && <LoadingSpinner />}
+      {!loading && reviewState && <ReviewDisplay review={reviewState} />}
+      {error && 
+        <p>⚠️ Error when generating review. Refresh and make sure openai key is valid ⚠️</p>
+      }
     </div>
   );
 }

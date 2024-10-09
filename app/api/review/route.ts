@@ -13,13 +13,13 @@ const ChessReview = z.object({
 })
 
 export async function POST(request: Request) {
-  const { prompt } = await request.json();
+  const { prompt, openAIKey } = await request.json();
 
-  if (!process.env.OPENAI_API_KEY) {
+  if (!openAIKey) {
     return NextResponse.json({ error: 'Missing OpenAI API key' }, { status: 500 });
   }
 
-  const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+  const openai = new OpenAI({ apiKey: openAIKey });
 
   try {
     const response = await openai.chat.completions.create({
@@ -29,7 +29,6 @@ export async function POST(request: Request) {
     });
 
     const review = response.choices[0].message.content;
-    console.log(review)
 
     return NextResponse.json({ review }, { status: 200 });
   } catch (error) {
