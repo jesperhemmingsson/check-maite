@@ -14,6 +14,7 @@ export default function FetchGames({ onFetchGames }: { onFetchGames: () => void 
 
   return (
     <div className="fetch-games-container">
+      <p>Enter you chess.com username, the year and month of the games you want to analyze below:</p>
       <input
         type="text"
         placeholder="Username"
@@ -33,7 +34,7 @@ export default function FetchGames({ onFetchGames }: { onFetchGames: () => void 
         onChange={(e) => setMonth(e.target.value)}
       />
       <button onClick={handleFetchGames}>
-        Fetch Data
+        Load games 
       </button>
     </div>
   );

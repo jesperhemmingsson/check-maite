@@ -96,8 +96,15 @@ input {
   color: #e0e0e0;
 }
 
+.fetch-games-container input{
+  width: 200px;
+  margin: auto;
+}
+
 .fetch-games-container button {
   background-color: #4CAF50;
+  width: 220px;
+  margin: auto;
   color: white;
   border: none;
   padding: 0.5em 1em;

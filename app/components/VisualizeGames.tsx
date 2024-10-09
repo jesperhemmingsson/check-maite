@@ -34,6 +34,8 @@ export default function VisualizeGames({ openAIKey, setOpenAIKey }: VisualizeGam
 
   return (
     <div className="container">
+      <h3>Time controls</h3>
+      <p>Select the time control(s) you want to analyze</p>
       <TimeControlCheckboxes
         selectedTypes={selectedTypes}
         onCheckboxChange={handleCheckboxChange}
@@ -43,6 +45,7 @@ export default function VisualizeGames({ openAIKey, setOpenAIKey }: VisualizeGam
       ) : (
         <p>No games found</p>
       )}
+      <h3>OpenAI key</h3>
       <input
         type="password"
         placeholder="Enter OpenAI Key"
