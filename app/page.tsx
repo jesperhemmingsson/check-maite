@@ -21,7 +21,7 @@ export default function Home() {
 
   return (
     <div className="home-container">
-      <h1>chess-maite</h1>
+      <h1>check-m[ai]te</h1>
       <GameProvider>
         {view === "form" && <FetchGames onFetchGames={handleFetchGames} />}
         {view === "games" && (
