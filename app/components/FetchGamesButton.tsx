@@ -12,7 +12,7 @@ export default function FetchGamesButton() {
   };
 
   return (
-    <div className="container">
+    <div className="fetch-games-container">
       <input
         type="text"
         placeholder="Username"

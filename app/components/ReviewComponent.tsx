@@ -20,7 +20,7 @@ const getReview = async (prompt: string) => {
 };
 
 const generatePrompt = (all_pgn: string[]) => `
-  You are going to act as my chess coach. You are going to be presented with all of latest blitz games in chess. I am looking for critical feedback in order to improve my game.
+  You are going to act as my chess coach. You are going to be presented with all of my latest chess games. I am looking for critical feedback in order to improve my game.
 
   What are the most important things I should work on to improve?
   -Why am I winning games?
@@ -29,6 +29,8 @@ const generatePrompt = (all_pgn: string[]) => `
   -Are there any specific openings I am struggling against?
   
   -What famous chess games should I look at for learning more about these aspects I need to improve in?
+
+  -What chess books should I read?
   
   I want the feedback to be closely linked to the games I played. Please reference the games whenever fitting.
   Give your feedback in a structured json format corresponding to the points above like this:
@@ -38,6 +40,7 @@ const generatePrompt = (all_pgn: string[]) => `
     "weaknessess": ["...", "...", "..."], # Bullet points reasons why I am losing. Very extensive list
     "struggling_openings": ["..", "...", "...."], # List of openings I am struggling against and what seems hard about them for me
     "games_study": ["...", "...."], # Famous chess games to study for learning and what they are intended to learn me
+    "book": ["..", ".."], # Chess books I should read
     "key_areas": ["...", "..."] # Bullet points on the summarized key areas I should work on to improve
   }
   

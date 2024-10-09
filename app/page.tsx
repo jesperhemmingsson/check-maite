@@ -7,11 +7,15 @@ import ReviewComponent from "./components/ReviewComponent";
 
 export default function Home() {
   return (
-    <div>
+    <div className="home-container">
       <GameProvider>
-        <FetchGamesButton />
-        <VisualizeGames />
-        <ReviewComponent />
+        <div className="sidebar">
+          <FetchGamesButton />
+        </div>
+        <div className="main-content">
+          <VisualizeGames />
+          <ReviewComponent />
+        </div>
       </GameProvider>
     </div>
   );
