@@ -1,5 +1,5 @@
-import { useContext, useState, useEffect } from "react";
-import { useGameContext, GameContext } from "../context/GameContext";
+import { useState, useEffect } from "react";
+import { useGameContext } from "../context/GameContext";
 import TimeControlCheckboxes from "./TimeControlCheckboxes";
 
 interface VisualizeGamesProps {

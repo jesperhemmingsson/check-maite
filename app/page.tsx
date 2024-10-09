@@ -9,7 +9,6 @@ import LoadingSpinner from "./components/LoadingSpinner";
 
 export default function Home() {
   const [view, setView] = useState<"form" | "games" | "review" | "loading">("form");
-  const [review, setReview] = useState<string>("");
   const [openAIKey, setOpenAIKey] = useState<string>(""); // State for OpenAI key
 
   const handleFetchGames = () => {
@@ -18,10 +17,6 @@ export default function Home() {
 
   const handleGenerateReview = async () => {
     setView("review");
-  };
-
-  const handleBack = () => {
-    setView("form");
   };
 
   return (
@@ -39,7 +34,7 @@ export default function Home() {
         {view === "loading" && <LoadingSpinner />}
         {view === "review" && (
           <>
-            <ReviewComponent review={review} openAIKey={openAIKey} />
+            <ReviewComponent openAIKey={openAIKey} />
           </>
         )}
       </GameProvider>

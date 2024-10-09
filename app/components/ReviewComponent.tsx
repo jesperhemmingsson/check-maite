@@ -3,7 +3,6 @@ import { useState, useEffect } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 
 interface ReviewComponentProps {
-  review: string;
   openAIKey: string;
 }
 
@@ -80,7 +79,7 @@ const ReviewDisplay = ({ review }: { review: string }) => {
   );
 };
 
-export default function ReviewComponent({ review, openAIKey }: ReviewComponentProps) {
+export default function ReviewComponent({ openAIKey }: ReviewComponentProps) {
   const { filteredGames } = useGameContext();
   const [reviewState, setReviewState] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(false);
