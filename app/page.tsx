@@ -28,7 +28,6 @@ export default function Home() {
           <>
             <VisualizeGames openAIKey={openAIKey} setOpenAIKey={setOpenAIKey} />
             <button onClick={handleGenerateReview}>Generate Review</button>
-            {view === "loading" && <LoadingSpinner />} 
           </>
         )} 
         {view === "loading" && <LoadingSpinner />}
