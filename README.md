@@ -32,7 +32,7 @@ Before running the application, make sure you have the following installed:
 
 1. Clone the repository:
    ```
-   git clone https://github.com/yourusername/check-maite.git
+   git clone https://github.com/jesperhemmingsson/check-maite.git
    cd check-maite
    ```
 
@@ -49,6 +49,8 @@ Before running the application, make sure you have the following installed:
    ```
 
 2. Open your browser and navigate to `http://localhost:3000`
+
+3. Or visit `https://check-maite.vercel.app/`
 
 ## Usage
 
