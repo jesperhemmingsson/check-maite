@@ -42,7 +42,7 @@ export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
         setFilteredGames, 
         fetchGames,
         loading,
-        error
+        error: error ? error.message : null
       }}
     >
       {children}

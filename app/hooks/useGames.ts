@@ -3,7 +3,7 @@ import { useState } from 'react';
 export const useGames = () => {
   const [games, setGames] = useState([]);
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState(null);
+  const [error, setError] = useState<Error | null>(null);
 
   const fetchGames = async (username: string, year: string, month: string) => {
     setLoading(true);
@@ -18,7 +18,7 @@ export const useGames = () => {
       const data = await response.json();
       setGames(data.games);
     } catch (err) {
-      setError(err.message);
+        setError(err as Error);
     } finally {
       setLoading(false);
     }
