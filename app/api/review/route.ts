@@ -12,6 +12,8 @@ const ChessReview = z.object({
   key_areas: z.array(z.string()),
 })
 
+export const maxDuration=60;
+
 export async function POST(request: Request) {
   const { prompt, openAIKey } = await request.json();
 
