@@ -14,7 +14,7 @@ export default function FetchGames({ onFetchGames }: { onFetchGames: () => void 
 
   return (
     <div className="fetch-games-container">
-      <p>Enter you chess.com username, the year and month of the games you want to analyze below:</p>
+      <p>Enter your chess.com username, the year and month of the games you want to analyze below:</p>
       <input
         type="text"
         placeholder="Username"

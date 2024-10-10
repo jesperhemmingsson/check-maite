@@ -5,17 +5,15 @@ import { GameProvider } from "./context/GameContext";
 import FetchGames from "./components/FetchGames";
 import VisualizeGames from "./components/VisualizeGames";
 import ReviewComponent from "./components/ReviewComponent";
-import LoadingSpinner from "./components/LoadingSpinner";
 
 export default function Home() {
-  const [view, setView] = useState<"form" | "games" | "review" | "loading">("form");
-  const [openAIKey, setOpenAIKey] = useState<string>(""); // State for OpenAI key
+  const [view, setView] = useState<"form" | "games" | "review">("form");
+  const [openAIKey, setOpenAIKey] = useState<string>("");
+  const [reviewKey, setReviewKey] = useState<number>(0);
 
-  const handleFetchGames = () => {
-    setView("games");
-  };
-
-  const handleGenerateReview = async () => {
+  const handleFetchGames = () => setView("games");
+  const handleGenerateReview = () => {
+    setReviewKey(prevKey => prevKey + 1);
     setView("review");
   };
 
@@ -29,13 +27,8 @@ export default function Home() {
             <VisualizeGames openAIKey={openAIKey} setOpenAIKey={setOpenAIKey} />
             <button onClick={handleGenerateReview}>Generate Review</button>
           </>
-        )} 
-        {view === "loading" && <LoadingSpinner />}
-        {view === "review" && (
-          <>
-            <ReviewComponent openAIKey={openAIKey} />
-          </>
         )}
+        {view === "review" && <ReviewComponent key={reviewKey} openAIKey={openAIKey} />}
       </GameProvider>
     </div>
   );

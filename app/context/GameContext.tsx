@@ -1,43 +1,50 @@
-import React, { useContext, createContext, useState } from "react";
+import React, { createContext, useState, ReactNode, useContext } from "react";
+import { useGames } from "../hooks/useGames";
 
-interface GameProviderProps {
-  children: React.ReactNode;
+interface Game {
+  id: string;
+  time_class: 'bullet' | 'blitz' | 'rapid';
+  pgn: string;
 }
 
-type gameContextType = {
-  games: any[];
-  filteredGames: any[];
-  setFilteredGames: React.Dispatch<React.SetStateAction<any[]>>;
-  fetchGames: (username: string, year: string, month: string) => void;
-};
+interface GameContextType {
+  games: Game[];
+  filteredGames: Game[];
+  setFilteredGames: React.Dispatch<React.SetStateAction<Game[]>>;
+  fetchGames: (username: string, year: string, month: string) => Promise<void>;
+  loading: boolean;
+  error: string | null;
+}
 
-const gameContextDefaultValues: gameContextType = {
-  games: [],
-  filteredGames: [],
-  setFilteredGames: () => {},
-  fetchGames: () => {},
-};
-
-export const GameContext = createContext<gameContextType>(gameContextDefaultValues);
+const GameContext = createContext<GameContextType | undefined>(undefined);
 
 export const useGameContext = () => {
-  return useContext(GameContext);
+  const context = useContext(GameContext);
+  if (context === undefined) {
+    throw new Error('useGameContext must be used within a GameProvider');
+  }
+  return context;
 };
 
-export const GameProvider = ({ children }: GameProviderProps) => {
-  const [games, setGames] = useState<any[]>([]);
-  const [filteredGames, setFilteredGames] = useState<any[]>([]);
+interface GameProviderProps {
+  children: ReactNode;
+}
 
-  const fetchGames = async (username: string, year: string, month: string) => {
-    const response = await fetch(
-      `https://api.chess.com/pub/player/${username}/games/${year}/${month}`
-    );
-    const data = await response.json();
-    setGames(data.games);
-  };
+export const GameProvider: React.FC<GameProviderProps> = ({ children }) => {
+  const { games, loading, error, fetchGames } = useGames();
+  const [filteredGames, setFilteredGames] = useState<Game[]>([]);
 
   return (
-    <GameContext.Provider value={{ games, filteredGames, setFilteredGames, fetchGames }}>
+    <GameContext.Provider 
+      value={{ 
+        games, 
+        filteredGames, 
+        setFilteredGames, 
+        fetchGames,
+        loading,
+        error
+      }}
+    >
       {children}
     </GameContext.Provider>
   );

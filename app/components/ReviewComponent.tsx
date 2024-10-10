@@ -1,5 +1,5 @@
 import { useGameContext } from "../context/GameContext";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import LoadingSpinner from "./LoadingSpinner";
 
 interface ReviewComponentProps {
@@ -12,7 +12,7 @@ const getReview = async (prompt: string, openAIKey: string) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify({ prompt, openAIKey }), // Include the OpenAI key in the request body
+    body: JSON.stringify({ prompt, openAIKey }),
   });
 
   if (!response.ok) {
@@ -82,30 +82,35 @@ const ReviewDisplay = ({ review }: { review: string }) => {
 export default function ReviewComponent({ openAIKey }: ReviewComponentProps) {
   const { filteredGames } = useGameContext();
   const [reviewState, setReviewState] = useState<string>("");
-  const [loading, setLoading] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<boolean>(false);
+  const hasGeneratedReview = useRef<boolean>(false);
 
   useEffect(() => {
-    const handleGenerateReview = async () => {
+    const generateReview = async () => {
+      if (!filteredGames || filteredGames.length === 0 || hasGeneratedReview.current) {
+        setLoading(false);
+        return;
+      }
+
       setError(false);
       setLoading(true);
-      const all_pgn = filteredGames?.map((game) => game.pgn);
+      const all_pgn = filteredGames.map((game) => game.pgn);
       const prompt = generatePrompt(all_pgn);
       try {
-        const review = await getReview(prompt, openAIKey); // Pass the OpenAI key to the getReview function
+        const review = await getReview(prompt, openAIKey);
         setReviewState(review);
+        hasGeneratedReview.current = true;
       } catch (error) {
-        console.error(error);
+        console.error('Error generating review:', error);
         setError(true);
       } finally {
         setLoading(false);
       }
     };
 
-    if (filteredGames && filteredGames.length > 0) {
-      handleGenerateReview();
-    }
-  }, [filteredGames, openAIKey]);
+    generateReview();
+  }, []); 
 
   return (
     <div className="container">
