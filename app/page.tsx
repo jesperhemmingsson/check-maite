@@ -19,7 +19,7 @@ export default function Home() {
 
   return (
     <div className="home-container">
-      <h1>check-m[ai]te</h1>
+      <h1 onClick={() => setView("form")}>check-m[ai]te</h1>
       <GameProvider>
         {view === "form" && <FetchGames onFetchGames={handleFetchGames} />}
         {view === "games" && (

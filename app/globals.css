@@ -132,3 +132,16 @@ input {
     transform: rotate(360deg);
   }
 }
+
+h1 {
+  cursor: pointer; 
+  transition: color 0.3s ease, transform 0.1s ease; 
+}
+
+h1:hover {
+  color: #45a049; 
+}
+
+h1:active {
+  transform: scale(0.98); 
+}
