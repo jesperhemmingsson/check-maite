@@ -61,6 +61,7 @@ const generatePrompt = (all_pgn: string[], beKind: boolean) => `
 
   ----------------------------
   Remember to ONLY output the the structured json. No markdown or any text added besides the json.
+  ${beKind ? "And again, use positive and encouraging language, especially when criticizing and reviewing weaknessess." : ""}
 `;
 
 const ReviewDisplay = ({ review }: { review: string }) => {
