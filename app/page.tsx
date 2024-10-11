@@ -10,6 +10,7 @@ export default function Home() {
   const [view, setView] = useState<"form" | "games" | "review">("form");
   const [openAIKey, setOpenAIKey] = useState<string>("");
   const [reviewKey, setReviewKey] = useState<number>(0);
+  const [beKind, setBeKind] = useState<boolean>(false);
 
   const handleFetchGames = () => setView("games");
   const handleGenerateReview = () => {
@@ -24,11 +25,16 @@ export default function Home() {
         {view === "form" && <FetchGames onFetchGames={handleFetchGames} />}
         {view === "games" && (
           <>
-            <VisualizeGames openAIKey={openAIKey} setOpenAIKey={setOpenAIKey} />
+            <VisualizeGames 
+              openAIKey={openAIKey} 
+              setOpenAIKey={setOpenAIKey} 
+              beKind={beKind}
+              setBeKind={setBeKind}
+            />
             <button onClick={handleGenerateReview}>Generate Review</button>
           </>
         )}
-        {view === "review" && <ReviewComponent key={reviewKey} openAIKey={openAIKey} />}
+        {view === "review" && <ReviewComponent key={reviewKey} openAIKey={openAIKey} beKind={beKind} />}
       </GameProvider>
     </div>
   );

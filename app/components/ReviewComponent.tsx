@@ -4,6 +4,7 @@ import LoadingSpinner from "./LoadingSpinner";
 
 interface ReviewComponentProps {
   openAIKey: string;
+  beKind: boolean;
 }
 
 const getReview = async (prompt: string, openAIKey: string) => {
@@ -23,8 +24,9 @@ const getReview = async (prompt: string, openAIKey: string) => {
   return data.review;
 };
 
-const generatePrompt = (all_pgn: string[]) => `
+const generatePrompt = (all_pgn: string[], beKind: boolean) => `
   You are going to act as my chess coach. You are going to be presented with all of my latest chess games. I am looking for critical feedback in order to improve my game.
+
 
   What are the most important things I should work on to improve?
   -Why am I winning games?
@@ -51,6 +53,9 @@ const generatePrompt = (all_pgn: string[]) => `
   Even if the output is going to be json I still want all answers to be thorough, detailed and extensive. Don't make it shorter just because it is in json.
 
   ONLY output json. No other text. No markdown. ONLY the json output.
+
+  ${beKind ? "Please do not be too harsh in your criticism. It is important for me to not get discouraged and to keep playing. Imagine you are a good friend who is also a chess grandmaster helping me improve." : ""}
+  ${beKind ? "Do not use any negative wording. For example instead of saying 'You sacrificed too much material in this game' say 'You could have played a more solid move here to avoid losing material'." : ""}
   ---------- GAMES -----------
   ${all_pgn.join("\n")}
 
@@ -79,7 +84,7 @@ const ReviewDisplay = ({ review }: { review: string }) => {
   );
 };
 
-export default function ReviewComponent({ openAIKey }: ReviewComponentProps) {
+export default function ReviewComponent({ openAIKey, beKind }: ReviewComponentProps) {
   const { filteredGames } = useGameContext();
   const [reviewState, setReviewState] = useState<string>("");
   const [loading, setLoading] = useState<boolean>(true);
@@ -96,7 +101,7 @@ export default function ReviewComponent({ openAIKey }: ReviewComponentProps) {
       setError(false);
       setLoading(true);
       const all_pgn = filteredGames.map((game) => game.pgn);
-      const prompt = generatePrompt(all_pgn);
+      const prompt = generatePrompt(all_pgn, beKind);
       try {
         const review = await getReview(prompt, openAIKey);
         setReviewState(review);

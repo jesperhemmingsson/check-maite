@@ -5,9 +5,11 @@ import TimeControlCheckboxes from "./TimeControlCheckboxes";
 interface VisualizeGamesProps {
   openAIKey: string;
   setOpenAIKey: React.Dispatch<React.SetStateAction<string>>;
+  beKind: boolean;
+  setBeKind: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export default function VisualizeGames({ openAIKey, setOpenAIKey }: VisualizeGamesProps) {
+export default function VisualizeGames({ openAIKey, setOpenAIKey, beKind, setBeKind }: VisualizeGamesProps) {
   const { games, filteredGames, setFilteredGames } = useGameContext();
   const [selectedTypes, setSelectedTypes] = useState({
     bullet: true,
@@ -52,6 +54,16 @@ export default function VisualizeGames({ openAIKey, setOpenAIKey }: VisualizeGam
         value={openAIKey}
         onChange={(e) => setOpenAIKey(e.target.value)}
       />
+      <h3>Kindness</h3>
+      <label>
+        <input
+          className="kind-checkbox"
+          type="checkbox"
+          checked={beKind}
+          onChange={(e) => setBeKind(e.target.checked)}
+        />
+        Please be kind
+      </label>
     </div>
   );
 }
